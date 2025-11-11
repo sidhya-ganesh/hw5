@@ -39,7 +39,7 @@ public class WordRecommender {
     public ArrayList<String> getWordSuggestions(String word, int tolerance, double commonPercent, int topN) {
         ArrayList<String> alternatives = new ArrayList<>(); //building an arraylist with words satisfying tolerance and commonPercent criterions.
         for (String candidate : dictionary) {
-            if ((Math.abs(candidate.length() - word.length()) <= tolerance && commonPercent <= commonPercentComp(candidate, word)) {  //covers both cases where the length of the candidate is less than or greater than the word, within "tolerance" difference.
+            if ((Math.abs(candidate.length() - word.length()) <= tolerance && commonPercent <= commonPercentComp(candidate, word))) {  //covers both cases where the length of the candidate is less than or greater than the word, within "tolerance" difference.
                 alternatives.add(candidate);
             }
         }
@@ -102,6 +102,10 @@ public class WordRecommender {
         int aCapBSize = intersection(a, b).size();
         int aCupBSize = union(a, b).size();
         return (double) aCapBSize/aCupBSize;
+    }
+
+    public ArrayList<String> getDictionary() {
+        return dictionary;
     }
 
 

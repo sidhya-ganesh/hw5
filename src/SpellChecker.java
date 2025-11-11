@@ -22,7 +22,7 @@ public class SpellChecker {
         String word = inputReader.nextLine().trim();
 
         //Continue until the user types 'quit' (case-insensitive)
-        while(!word.equalsIgnoreCase("guit")) {
+        while(!word.equalsIgnoreCase("quit")) {
             // Check if the entered word exists in the dictionary
             if(recommender.getDictionary().contains(word)) {
                 System.out.println("Correct.");
