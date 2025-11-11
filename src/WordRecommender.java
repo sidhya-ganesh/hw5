@@ -1,3 +1,9 @@
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class WordRecommender {
 
     private ArrayList<String> dictionary;           //we will use the WordRecommender constructor to build the dictionary
