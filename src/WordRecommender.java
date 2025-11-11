@@ -27,7 +27,7 @@
         int word1pos = word1.length()-1;
         int word2pos = word2.length()-1;
         while (word2pos >= 0 && 0 <= word1pos) {       //once either word1pos or word2pos reaches zero, comparison stops within the bounds
-            if (word1.charAt(word1pos) == word1.charAt(word2pos)) {     //comparing each letter, aligning the words along the right
+            if (word1.charAt(word1pos) == word2.charAt(word2pos)) {     //comparing each letter, aligning the words along the right
                 rightcount ++;
                 word1pos = word1pos -1;     //whichever word is smaller will have pos =0 when the loop ends
                 word2pos = word2pos -1;
@@ -37,10 +37,33 @@
     }
   
     public ArrayList<String> getWordSuggestions(String word, int tolerance, double commonPercent, int topN) {
-      // TODO: change this!
-      return null;
+        ArrayList<String> alternatives = new ArrayList<>(); //building an arraylist with words satisfying tolerance and commonPercent criterions.
+        for (String candidate : dictionary) {
+            if ((Math.abs(candidate.length() - word.length()) <= tolerance) && (commonPercent <= commonPercentComp(candidate, word))) {  //covers both cases where the length of the candidate is less than or greater than the word, within "tolerance" difference.
+                alternatives.add(candidate);
+
+            }
+        }
+        ArrayList<String> alternativesTopN = new ArrayList<>();  //making an ArrayList with the top N choices from the alternatives ArrayList
+        int count = 0;
+        while (count < topN)  {//we will add the best available option from alternatives to alternativesTopN TopN times
+            int pos = 0; //pos will track the position of the best option in alternatives ArrayList
+            double bestSimilarity = getSimilarity(word, alternatives.get(0)); //the best similarity is initialized to the first element in alternatives
+            for (int j = 1; j < alternatives.size(); j++) { //we are searching through the rest of alternatives for the best candidate
+                double newSimilarity = getSimilarity(word, alternatives.get(j));
+                if (bestSimilarity < newSimilarity) {
+                    bestSimilarity = newSimilarity;    //updating bestSimilarity for each candidate with greater similarity
+                    pos = j;            //the position of the best candidate out of the remaining on the list
+                }
+            }
+            alternativesTopN.add(alternatives.remove(pos)); //we are adding the best candidate to alternativesTopN, and removing it from alternatives
+            count++;
+
+        }
+
+      return alternativesTopN;
     }
-    private HashSet<Character> intersection(HashSet<Character> A, HashSet<Character> B) {
+    private HashSet<Character> intersection(HashSet<Character> A, HashSet<Character> B) { //A \cap B
         HashSet<Character> intersection = new HashSet<>();
         for (char c : A) {
             if (B.contains(c)) {
@@ -50,7 +73,7 @@
         return intersection;
 
     }
-    private HashSet<Character> union(HashSet<Character> A, HashSet<Character> B) {
+    private HashSet<Character> union(HashSet<Character> A, HashSet<Character> B) { //A \cup B
         HashSet<Character> union = new HashSet<>();
         for (char c : A) {
             union.add(c);
@@ -61,6 +84,25 @@
         return union;
 
     }
+    private HashSet<Character> stringToCharacter(String s) {  //converting a string to a character HashSet to be used in union and intersection
+        HashSet<Character> set = new HashSet<>();
+        for (int i = 0; i<s.length(); i++) {
+            set.add(s.charAt(i));
+
+        }
+        return set;
+
+    }
+    private double commonPercentComp(String A, String B) {  // (A \cap B)/(A \cup B) -this will be the comparison against the commonPercent benchmark
+        HashSet<Character> a = stringToCharacter(A);
+        HashSet<Character> b = stringToCharacter(B);
+        int aCapBSize = intersection(a, b).size();
+        int aCupBSize = union(a, b).size();
+        return (double) aCapBSize/aCupBSize;
+    }
+
+
+
 
 
 
