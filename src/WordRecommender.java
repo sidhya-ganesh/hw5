@@ -26,12 +26,12 @@ public class WordRecommender {
         int rightcount = 0;
         int word1pos = word1.length()-1;
         int word2pos = word2.length()-1;
-        while (word2pos >= 0 && 0 <= word1pos) {       //once either word1pos or word2pos reaches zero, comparison stops within the bounds
+        while (word1pos >= 0 && word2pos >= 0) {       //once either word1pos or word2pos reaches zero, comparison stops within the bounds
             if (word1.charAt(word1pos) == word2.charAt(word2pos)) {     //comparing each letter, aligning the words along the right
                 rightcount ++;
-                word1pos = word1pos -1;     //whichever word is smaller will have pos =0 when the loop ends
-                word2pos = word2pos -1;
             }
+            word1pos --;     //whichever word is smaller will have pos =0 when the loop ends
+            word2pos --;
         }
         return (leftcount + rightcount) / 2.0;    //the "similarity"
     }
@@ -39,14 +39,17 @@ public class WordRecommender {
     public ArrayList<String> getWordSuggestions(String word, int tolerance, double commonPercent, int topN) {
         ArrayList<String> alternatives = new ArrayList<>(); //building an arraylist with words satisfying tolerance and commonPercent criterions.
         for (String candidate : dictionary) {
-            if ((Math.abs(candidate.length() - word.length()) <= tolerance) && (commonPercent <= commonPercentComp(candidate, word))) {  //covers both cases where the length of the candidate is less than or greater than the word, within "tolerance" difference.
+            if ((Math.abs(candidate.length() - word.length()) <= tolerance && commonPercent <= commonPercentComp(candidate, word)) {  //covers both cases where the length of the candidate is less than or greater than the word, within "tolerance" difference.
                 alternatives.add(candidate);
-
             }
         }
+        if (alternatives.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         ArrayList<String> alternativesTopN = new ArrayList<>();  //making an ArrayList with the top N choices from the alternatives ArrayList
         int count = 0;
-        while (count < topN)  {//we will add the best available option from alternatives to alternativesTopN TopN times
+        while (count < topN && !alternatives.isEmpty())  {//we will add the best available option from alternatives to alternativesTopN TopN times
             int pos = 0; //pos will track the position of the best option in alternatives ArrayList
             double bestSimilarity = getSimilarity(word, alternatives.get(0)); //the best similarity is initialized to the first element in alternatives
             for (int j = 1; j < alternatives.size(); j++) { //we are searching through the rest of alternatives for the best candidate
