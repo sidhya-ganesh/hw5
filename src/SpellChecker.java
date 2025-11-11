@@ -16,6 +16,14 @@ public class SpellChecker {
     public void start() {
         System.out.print("Enter a word (or type 'quit' to exit): ");
         String word = inputReader.nextLine().trim();
+
+        while(!word.equalsIgnoreCase("guit")) {
+            if(recommender.getDictionary().contains(word)) {
+                System.out.println("Correct.");
+            } else {
+                System.out.println("Incorrect.");
+            }
+        }
       // TODO: Complete the body of this method, as necessary.
       inputReader.close();  // DO NOT MODIFY - must be the last line of this method!
     }
