@@ -1,5 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 
 public class SpellChecker {
     // Use this field everytime you need to read user input
