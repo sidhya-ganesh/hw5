@@ -12,6 +12,7 @@
             }
         }
 
+
     }
   
     public double getSimilarity(String word1, String word2) {
