@@ -1,15 +1,21 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class SpellChecker {
     // Use this field everytime you need to read user input
     private Scanner inputReader; // DO NOT MODIFY
+    private WordRecommender recommender;
+
 
     public SpellChecker() {
       inputReader = new Scanner(System.in); // DO NOT MODIFY - must be included in this method
-      // TODO: Complete the body of this constructor, as necessary.
+      recommender = new WordRecommender("dictionary.txt");
+      //COMMENT ABOUT LINE ABOVE
     }
   
     public void start() {
+        System.out.print("Enter a word (or type 'quit' to exit): ");
+        String word = inputReader.nextLine().trim();
       // TODO: Complete the body of this method, as necessary.
       inputReader.close();  // DO NOT MODIFY - must be the last line of this method!
     }
