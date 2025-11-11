@@ -22,7 +22,16 @@ public class SpellChecker {
                 System.out.println("Correct.");
             } else {
                 System.out.println("Incorrect.");
+                ArrayList<String> suggestions = recommender.getWordSuggestions(word, 2, 0.5, 5);
+                if (suggestions.size() > 0) {
+                    System.out.println("Maybe you meant:");
+                    for (String s : suggestions) {
+                        System.out.println("  " + s);
+                    }
+                }
             }
+            System.out.print("Enter a word (or type 'quit' to exit): ");
+            word = inputReader.nextLine().trim();
         }
       // TODO: Complete the body of this method, as necessary.
       inputReader.close();  // DO NOT MODIFY - must be the last line of this method!
