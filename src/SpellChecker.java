@@ -13,7 +13,7 @@ public class SpellChecker {
     private WordRecommender recommender;
 
 
-    public SpellChecker() {
+    public SpellChecker() throws IOException {
         //Instantiate WordRecommender with dictionary file
         //Object will allow to check words and get suggestions for the misspellings
         recommender = new WordRecommender("dictionary.txt");
