@@ -1,3 +1,5 @@
+/**
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
@@ -20,6 +22,7 @@ public class SpellChecker {
         //try catch here, and reprompting wherever im opening files **************
     }
  **/
+/**
     public SpellChecker() {
         inputReader = new Scanner(System.in); // DO NOT MODIFY - must be included in this method
 
@@ -77,8 +80,7 @@ public class SpellChecker {
         inputReader.close();  // DO NOT MODIFY - must be the last line of this method!
     }
  **/
-
-
+/**
     public void start() {
         boolean validFile = false;
         String inputFile = "";
@@ -109,4 +111,148 @@ public class SpellChecker {
 
 
     // You can of course write other methods as well.
+}**/
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class SpellChecker {
+    // Use this field every time you need to read user input
+    private Scanner inputReader; // DO NOT MODIFY
+    private WordRecommender recommender;
+
+    // --------------------------------------------------------------
+    // Constructor: builds dictionary by prompting user until valid file
+    // --------------------------------------------------------------
+    public SpellChecker() {
+        inputReader = new Scanner(System.in); // DO NOT MODIFY
+
+        boolean validDictionary = false;
+        while (!validDictionary) {
+            try {
+                System.out.printf(Util.DICTIONARY_PROMPT);
+                String dictFile = inputReader.nextLine().trim();
+                recommender = new WordRecommender(dictFile);
+                System.out.printf(Util.DICTIONARY_SUCCESS_NOTIFICATION, dictFile);
+                validDictionary = true;
+            } catch (IOException e) {
+                System.out.printf(Util.FILE_OPENING_ERROR);
+            }
+        }
+    }
+
+    // --------------------------------------------------------------
+    // Main start() method: prompts for file, spellchecks it, writes output
+    // --------------------------------------------------------------
+    public void start() {
+        boolean validFile = false;
+        String inputFile = "";
+        Scanner fileReader = null;
+
+        // STEP 1: Prompt user until a valid file to spell-check is provided
+        while (!validFile) {
+            try {
+                System.out.printf(Util.FILENAME_PROMPT);
+                inputFile = inputReader.nextLine().trim();
+
+                fileReader = new Scanner(new FileInputStream(inputFile));
+                validFile = true;
+
+                String outputFile = inputFile.substring(0, inputFile.lastIndexOf('.')) + "_chk.txt";
+                System.out.printf(Util.FILE_SUCCESS_NOTIFICATION, inputFile, outputFile);
+
+                // STEP 2: Create writer for the checked output
+                PrintWriter writer = new PrintWriter(outputFile);
+
+                // STEP 3: Read each word and check spelling
+                while (fileReader.hasNext()) {
+                    String word = fileReader.next();
+
+                    // If the word is in the dictionary, write as-is
+                    if (recommender.getDictionary().contains(word)) {
+                        writer.print(word);
+                    } else {
+                        System.out.printf(Util.MISSPELL_NOTIFICATION, word);
+
+                        // Get suggestions from recommender
+                        ArrayList<String> suggestions =
+                                recommender.getWordSuggestions(word, 2, 0.5, 4);
+
+                        String replacement = word; // default if user "accepts"
+
+                        if (suggestions.isEmpty()) {
+                            // No suggestions found
+                            System.out.printf(Util.NO_SUGGESTIONS);
+                            System.out.printf(Util.TWO_OPTION_PROMPT);
+
+                            while (true) {
+                                String choice = inputReader.nextLine().trim();
+                                if (choice.equals("a")) {
+                                    break;
+                                } else if (choice.equals("t")) {
+                                    System.out.printf(Util.MANUAL_REPLACEMENT_PROMPT);
+                                    replacement = inputReader.nextLine().trim();
+                                    break;
+                                } else {
+                                    System.out.printf(Util.INVALID_RESPONSE);
+                                }
+                            }
+                        } else {
+                            // Display available suggestions
+                            System.out.printf(Util.FOLLOWING_SUGGESTIONS);
+                            for (int i = 0; i < suggestions.size(); i++) {
+                                System.out.printf(Util.SUGGESTION_ENTRY, i + 1, suggestions.get(i));
+                            }
+                            System.out.printf(Util.THREE_OPTION_PROMPT);
+
+                            while (true) {
+                                String choice = inputReader.nextLine().trim();
+                                if (choice.equals("a")) {
+                                    break;
+                                } else if (choice.equals("t")) {
+                                    System.out.printf(Util.MANUAL_REPLACEMENT_PROMPT);
+                                    replacement = inputReader.nextLine().trim();
+                                    break;
+                                } else if (choice.equals("r")) {
+                                    System.out.printf(Util.AUTOMATIC_REPLACEMENT_PROMPT);
+                                    try {
+                                        int pick = Integer.parseInt(inputReader.nextLine().trim());
+                                        if (pick >= 1 && pick <= suggestions.size()) {
+                                            replacement = suggestions.get(pick - 1);
+                                            break;
+                                        } else {
+                                            System.out.printf(Util.INVALID_RESPONSE);
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        System.out.printf(Util.INVALID_RESPONSE);
+                                    }
+                                } else {
+                                    System.out.printf(Util.INVALID_RESPONSE);
+                                }
+                            }
+                        }
+
+                        writer.print(replacement);
+                    }
+
+                    // Add a space between words if more remain
+                    if (fileReader.hasNext()) {
+                        writer.print(" ");
+                    }
+                }
+
+                writer.close();
+                fileReader.close();
+
+            } catch (IOException e) {
+                System.out.printf(Util.FILE_OPENING_ERROR);
+            }
+        }
+
+        // STEP 4: Close Scanner (required by autograder)
+        inputReader.close(); // DO NOT MODIFY - must be last line of this method
+    }
 }
