@@ -127,6 +127,8 @@ public class SpellChecker {
     // --------------------------------------------------------------
     // Constructor: builds dictionary by prompting user until valid file
     // --------------------------------------------------------------
+
+    /**
     public SpellChecker() {
         inputReader = new Scanner(System.in); // DO NOT MODIFY
 
@@ -143,6 +145,27 @@ public class SpellChecker {
             }
         }
     }
+     **/
+    public SpellChecker() {
+        inputReader = new Scanner(System.in); // DO NOT MODIFY
+
+        boolean validDictionary = false;
+
+        while (!validDictionary) {
+            System.out.printf(Util.DICTIONARY_PROMPT); // exact prompt
+
+            String dictFile = inputReader.nextLine().trim();
+
+            try {
+                recommender = new WordRecommender(dictFile);
+                System.out.printf(Util.DICTIONARY_SUCCESS_NOTIFICATION, dictFile);
+                validDictionary = true;
+            } catch (IOException e) {
+                System.out.printf(Util.FILE_OPENING_ERROR);
+            }
+        }
+    }
+
 
     // --------------------------------------------------------------
     // Main start() method: prompts for file, spellchecks it, writes output
