@@ -1,5 +1,5 @@
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
 
@@ -18,6 +18,7 @@ public class SpellCheckerTest {
         // just checking that it initializes correctly with a valid dictionary
         SpellChecker sc = createChecker();
         assertNotNull("SpellChecker should not be null after init", sc);
+        //MESSAGE SHOULD BE LAST PARAMETER
     }
 
     @Test
@@ -25,6 +26,7 @@ public class SpellCheckerTest {
         // we assume SpellChecker internally creates or uses a WordRecommender
         SpellChecker sc = createChecker();
         assertNotNull("SpellChecker should have a WordRecommender", sc.getWordRecommender());
+        //I CAN'T ACCESS WORDRECOMMENDER ETC. MAKE THESE METHODS PUBLIC
     }
 
     @Test

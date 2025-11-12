@@ -18,6 +18,7 @@ public class SpellChecker {
         //Object will allow to check words and get suggestions for the misspellings
         recommender = new WordRecommender("dictionary.txt");
         inputReader = new Scanner(System.in); // DO NOT MODIFY - must be included in this method
+        //try catch here, and reprompting wherever im opening files **************
     }
 
     public void start() {
