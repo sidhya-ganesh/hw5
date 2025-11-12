@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.IOException;
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 
 // Tests for WordRecommender.java
 // These tests focus on checking that the main methods work logically, handle weird cases gracefully, and return the right results
