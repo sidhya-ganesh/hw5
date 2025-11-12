@@ -34,11 +34,11 @@ public class WordRecommender {
                     dictionary.add(line);
                 }
             }
-        } catch (IOException e) {
+        } /*catch (IOException e) {
             System.out.println("There was an error opening the dictionary file: " + dictionaryFile);
             // rethrow so the caller (SpellChecker) can handle it properly
             throw e;
-        }
+        } */
     }
 
     public double getSimilarity(String word1, String word2) {
