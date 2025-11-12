@@ -4,11 +4,13 @@ import java.util.Scanner;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+
 public class WordRecommender {
 
     private ArrayList<String> dictionary;           //we will use the WordRecommender constructor to build the dictionary
 
-    public WordRecommender(String dictionaryFile) throws IOException {
+    /**
+     * public WordRecommender(String dictionaryFile) throws IOException {
         dictionary = new ArrayList<>();
         try (FileInputStream input = new FileInputStream(dictionaryFile);
              Scanner inputReader = new Scanner(input)) {     //feeding the contents of dictionaryFile into the scanner while theres a next line
@@ -19,6 +21,24 @@ public class WordRecommender {
         }
 
 
+    }
+    **/
+    public WordRecommender(String dictionaryFile) throws IOException {
+        dictionary = new ArrayList<>();
+        try (FileInputStream input = new FileInputStream(dictionaryFile);
+             Scanner inputReader = new Scanner(input)) {
+            // feeding the contents of dictionaryFile into the scanner while there's a next line
+            while (inputReader.hasNextLine()) {
+                String line = inputReader.nextLine().trim();
+                if (!line.isEmpty()) {
+                    dictionary.add(line);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("There was an error opening the dictionary file: " + dictionaryFile);
+            // rethrow so the caller (SpellChecker) can handle it properly
+            throw e;
+        }
     }
 
     public double getSimilarity(String word1, String word2) {

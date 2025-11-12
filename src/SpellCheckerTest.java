@@ -17,7 +17,7 @@ public class SpellCheckerTest {
     public void testConstructor_runsWithoutError() throws IOException {
         // just checking that it initializes correctly with a valid dictionary
         SpellChecker sc = createChecker();
-        assertNotNull("SpellChecker should not be null after init", sc);
+        assertNotNull(sc, "SpellChecker should not be null after init");
         //MESSAGE SHOULD BE LAST PARAMETER
     }
 
@@ -34,7 +34,7 @@ public class SpellCheckerTest {
         SpellChecker sc = createChecker();
         boolean result = sc.isWordValid("hello");
         // should exist in dictionary
-        assertTrue("Common word should be recognized", result);
+        assertTrue(result,"Common word should be recognized");
     }
 
     @Test
@@ -42,7 +42,7 @@ public class SpellCheckerTest {
         SpellChecker sc = createChecker();
         boolean result = sc.isWordValid("zzzzzzzz");
         // should not exist in dictionary
-        assertFalse("Nonsense word should be invalid", result);
+        assertFalse(result,"Nonsense word should be invalid");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class SpellCheckerTest {
         SpellChecker sc = createChecker();
         // pretend we’re calling into its suggestion helper
         var suggestions = sc.suggestCorrections("mispell", 2, 0.2, 3);
-        assertNotNull("Should return a suggestion list", suggestions);
+        assertNotNull(suggestions, "Should return a suggestion list");
         assertTrue("Should return at least 1 suggestion for a close misspell", suggestions.size() > 0);
     }
 
