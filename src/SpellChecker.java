@@ -149,22 +149,24 @@ public class SpellChecker {
     public SpellChecker() {
         inputReader = new Scanner(System.in); // DO NOT MODIFY
 
-        boolean validDictionary = false;
+        boolean loaded = false;
 
-        while (!validDictionary) {
-            System.out.printf(Util.DICTIONARY_PROMPT); // exact prompt
-
+        // keep prompting until we can load a valid dictionary
+        while (!loaded) {
+            System.out.printf(Util.DICTIONARY_PROMPT);  // must be printed *every* time before reading filename
             String dictFile = inputReader.nextLine().trim();
 
             try {
                 recommender = new WordRecommender(dictFile);
                 System.out.printf(Util.DICTIONARY_SUCCESS_NOTIFICATION, dictFile);
-                validDictionary = true;
+                loaded = true;
             } catch (IOException e) {
+                // print *only* this message — no extra newlines or spaces
                 System.out.printf(Util.FILE_OPENING_ERROR);
             }
         }
     }
+
 
 
     // --------------------------------------------------------------
